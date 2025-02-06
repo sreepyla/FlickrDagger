@@ -7,6 +7,10 @@ class FlickrRepositoryImpl @Inject constructor(
     private val apiService: FlickrApiService
 ) : FlickrRepository {
     override suspend fun searchImages(query: String): List<FlickrImage> {
-        return apiService.searchImages(query).items
+        return try {
+            apiService.searchImages(query).items
+        } catch (e: Exception) {
+            emptyList() // Return empty list on API failure instead of throwing an error
+        }
     }
 }
